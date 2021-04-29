@@ -1,8 +1,8 @@
 import React from 'react';
-import SassComponent from './chap.09/SassComponet';
+import CssModule from './chap.09/CSSModule';
 
 const App = () => {
-  return <SassComponent />;
+  return <CssModule />;
 };
 
 export default App;
