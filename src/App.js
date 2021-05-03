@@ -1,48 +1,46 @@
-import React, { useCallback, useRef, useState } from 'react';
-import TodoInsert from './chap.10/components/TodoInsert';
-import TodoList from './chap.10/components/TodoList';
-import TodoTemplate from './chap.10/components/TodoTemplate';
-import './index.css';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import Movie from './movies/Movie';
+import './App.css';
 
 const App = () => {
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      text: '기초1',
-      checked: true,
-    },
-    {
-      id: 2,
-      text: '기초2',
-      checked: true,
-    },
-    {
-      id: 3,
-      text: '기초3',
-      checked: false,
-    },
-  ]);
+  const [loading, setLoading] = useState(true);
+  const [movies, setMovies] = useState([]);
 
-  const nextId = useRef(4);
-
-  const onInsert = useCallback(
-    (text) => {
-      const todo = {
-        id: nextId.current,
-        text,
-        checked: false,
-      };
-      setTodos(todos.concat(todo));
-      nextId.current += 1;
-    },
-    [todos]
-  );
+  useEffect(async () => {
+    setLoading(true);
+    const {
+      data: {
+        data: { movies },
+      },
+    } = await axios.get('https://yts.mx/api/v2/list_movies.json');
+    setMovies(movies);
+    setLoading(false);
+    console.log(movies);
+  }, []);
 
   return (
-    <TodoTemplate>
-      <TodoInsert onInsert={onInsert} />
-      <TodoList todos={todos} />
-    </TodoTemplate>
+    <section className="container">
+      {loading ? (
+        <div className="loader">
+          <span className="loader__text">Loading...</span>
+        </div>
+      ) : (
+        <div className="movies">
+          {movies.map((movie) => (
+            <Movie
+              key={movie.id}
+              id={movie.id}
+              title={movie.title}
+              genres={movie.genres ? movie.genres : ['undefined']}
+              poster={movie.medium_cover_image}
+              summary={movie.summary}
+              year={movie.year}
+            />
+          ))}
+        </div>
+      )}
+    </section>
   );
 };
 
