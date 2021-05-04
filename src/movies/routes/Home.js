@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Movie from './movies/components/Movie';
-import './App.css';
+import Movie from '../components/Movie';
+import './Home.css';
 
-const App = () => {
+const Home = () => {
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
 
@@ -46,4 +46,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Home;
