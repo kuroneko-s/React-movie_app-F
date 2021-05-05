@@ -1,48 +1,18 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import axios from 'axios';
-import Movie from './movies/components/Movie';
-import './App.css';
+import React from 'react';
+import { HashRouter, Route } from 'react-router-dom';
+import Navigation from './movies/components/Navigation';
+import About from './movies/routes/About';
+import Details from './movies/routes/Details';
+import Home from './movies/routes/Home';
 
 const App = () => {
-  const [loading, setLoading] = useState(true);
-  const [movies, setMovies] = useState([]);
-
-  useEffect(async () => {
-    setLoading(true);
-    const {
-      data: {
-        data: { movies },
-      },
-    } = await axios.get(
-      'https://yts.mx/api/v2/list_movies.json?sort_by=rating'
-    );
-    setMovies(movies);
-    setLoading(false);
-    console.log(movies);
-  }, []);
-
   return (
-    <section className="container">
-      {loading ? (
-        <div className="loader">
-          <span className="loader__text">Loading...</span>
-        </div>
-      ) : (
-        <div className="movies">
-          {movies.map((movie) => (
-            <Movie
-              key={movie.id}
-              id={movie.id}
-              title={movie.title}
-              genres={movie.genres ? movie.genres : ['undefined']}
-              poster={movie.medium_cover_image}
-              summary={movie.summary}
-              year={movie.year}
-            />
-          ))}
-        </div>
-      )}
-    </section>
+    <HashRouter>
+      <Navigation />
+      <Route path="/about" component={About} />
+      <Route path="/movie-detail" component={Details} />
+      <Route path="/" component={Home} exact={true} />
+    </HashRouter>
   );
 };
 
